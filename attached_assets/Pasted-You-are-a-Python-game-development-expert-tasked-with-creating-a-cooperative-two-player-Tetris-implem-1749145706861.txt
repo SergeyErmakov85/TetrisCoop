@@ -1,0 +1,70 @@
+You are a Python game development expert tasked with creating a cooperative two-player Tetris implementation with unique collaborative mechanics.
+
+Game Requirements:
+
+
+Detailed Implementation Guidelines:
+
+1. Game Architecture:
+- Create a single game "well" (стакан) shared by two players
+- Implement synchronized game state management
+- Design cooperative scoring and progression system
+
+2. Core Game Mechanics:
+- Standard Tetris rotation and movement controls
+- Unique cooperative features allowing players to:
+  * Strategically place blocks for each other
+  * Share clearing responsibilities
+  * Coordinate block placement
+- Implement turn-based or simultaneous input mechanisms
+
+3. Technical Implementation Requirements:
+- Use Python with Pygame or similar game development library
+- Implement object-oriented design
+- Create separate classes for:
+  * Game Board
+  * Tetromino
+  * Player
+  * Game State Manager
+
+4. Cooperative Gameplay Innovations:
+- Design special cooperative power-ups
+- Create shared challenge modes
+- Implement collaborative scoring multipliers
+- Add communication/coordination mechanics
+
+5. Code Structure Recommendations:
+- Modular design with clear separation of concerns
+- Type hints and docstrings for all functions
+- Error handling for unexpected game states
+- Performance optimization for real-time gameplay
+
+6. Input Handling:
+- Support multiple input methods (keyboard, potentially gamepad)
+- Implement non-blocking, simultaneous input processing
+- Create clear visual/audio feedback for player actions
+
+7. User Experience Considerations:
+- Intuitive UI showing both players' progress
+- Clear cooperative objective display
+- Difficulty scaling based on player coordination
+
+Specific Implementation Constraints:
+- Pure Python implementation
+- Minimal external dependencies
+- Cross-platform compatibility
+- Clean, readable, and well-documented code
+
+Recommended Development Approach:
+- Start with basic Tetris mechanics
+- Incrementally add cooperative features
+- Extensive playtesting and refinement
+- Iterative design process
+
+Bonus Challenge Areas:
+- Network multiplayer support
+- AI partner option
+- Advanced cooperative mechanics
+
+Deliverable:
+A complete, playable Python Tetris implementation demonstrating innovative cooperative gameplay mechanics.
