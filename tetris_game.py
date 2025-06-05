@@ -13,8 +13,19 @@ class CooperativeTetris:
     
     def __init__(self):
         """Initialize the game"""
+        import os
+        os.environ['SDL_VIDEODRIVER'] = 'x11'
+        
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.init()
+        
+        # Try to set up the display with error handling
+        try:
+            self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        except pygame.error:
+            # Fallback for headless environments
+            self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.DOUBLEBUF)
+        
         pygame.display.set_caption("Cooperative Tetris")
         self.clock = pygame.time.Clock()
         
