@@ -45,6 +45,8 @@ class CooperativeTetris:
         # Game timing
         self.last_fall_time = time.time() * 1000
         self.fall_time = FALL_TIME
+        self.lock_timer = 0
+        self.LOCK_DELAY = 1000  # 1 second lock delay
         
         # Game state
         self.running = True
@@ -61,6 +63,14 @@ class CooperativeTetris:
         
         # Start with player 1
         self.switch_turn()
+        
+    def is_on_ground(self, piece):
+        """Check if the piece is on the ground (cannot move down)"""
+        if not piece:
+            return False
+        test_piece = piece.copy()
+        test_piece.move(0, 1)
+        return not self.board.is_valid_position(test_piece)
     
     def switch_turn(self):
         """Switch to the other player's turn"""
@@ -72,6 +82,7 @@ class CooperativeTetris:
             self.other_player = self.player2
         
         self.turn_switch_timer = time.time() * 1000
+        self.lock_timer = 0  # Reset lock timer on turn switch
         
         # If current player doesn't have a piece, spawn one
         if not self.current_player.current_piece:
@@ -124,6 +135,10 @@ class CooperativeTetris:
         if self.current_player.current_piece:
             action = self.current_player.handle_input(keys_pressed, current_time, self.board)
             
+            # Reset lock timer on valid move
+            if action in ['rotate', 'move_left', 'move_right', 'move_down']:
+                self.lock_timer = 0
+            
             # Handle piece passing
             if action == 'pass_piece' and self.other_player.current_piece is None:
                 passed_piece = self.current_player.current_piece
@@ -135,6 +150,18 @@ class CooperativeTetris:
             # Handle hard drop
             if action == 'hard_drop':
                 self.place_current_piece()
+                self.last_fall_time = current_time # Reset fall timer
+                return # Skip falling/locking logic for this frame
+        
+        # Handle locking
+        if self.current_player.current_piece:
+            if self.is_on_ground(self.current_player.current_piece):
+                if self.lock_timer == 0:
+                    self.lock_timer = current_time
+                elif current_time - self.lock_timer > self.LOCK_DELAY:
+                    self.place_current_piece()
+            else:
+                self.lock_timer = 0
         
         # Handle piece falling
         if current_time - self.last_fall_time > self.fall_time:
@@ -152,7 +179,8 @@ class CooperativeTetris:
         if self.board.is_valid_position(test_piece):
             self.current_player.current_piece.move(0, 1)
         else:
-            self.place_current_piece()
+            # Do not place immediately, let the lock timer handle it
+            pass
     
     def place_current_piece(self):
         """Place the current piece on the board"""
@@ -185,6 +213,7 @@ class CooperativeTetris:
         
         # Switch turns after placing a piece
         self.switch_turn()
+        self.lock_timer = 0  # Reset lock timer
     
     def draw_board(self):
         """Draw the game board"""
@@ -335,6 +364,7 @@ class CooperativeTetris:
         self.player1.spawn_new_piece()
         self.player2.spawn_new_piece()
         self.switch_turn()
+        self.lock_timer = 0
     
     def run(self):
         """Main game loop"""
